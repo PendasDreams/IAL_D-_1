@@ -73,7 +73,8 @@ void List_Error() {
  * @param list Ukazatel na strukturu jednosměrně vázaného seznamu
  */
 void List_Init( List *list ) {
-	solved = FALSE; /* V případě řešení, smažte tento řádek! */
+	list->firstElement = NULL;
+	list->activeElement = NULL;
 }
 
 /**
@@ -84,7 +85,19 @@ void List_Init( List *list ) {
  * @param list Ukazatel na inicializovanou strukturu jednosměrně vázaného seznamu
  **/
 void List_Dispose( List *list ) {
-	solved = FALSE; /* V případě řešení, smažte tento řádek! */
+		
+	ListElementPtr prvek;						
+	
+	if ((list == NULL) || (list->firstElement == NULL)){		
+		return;
+	} else {
+		while ((list->firstElement != NULL)){
+			prvek = list->firstElement;			
+			list->firstElement = prvek->nextElement;		
+			free(prvek);				
+		}
+		list->activeElement = NULL;				
+	}
 }
 
 /**
@@ -96,7 +109,17 @@ void List_Dispose( List *list ) {
  * @param data Hodnota k vložení na začátek seznamu
  */
 void List_InsertFirst( List *list, int data ) {
-	solved = FALSE; /* V případě řešení, smažte tento řádek! */
+		
+	ListElementPtr prvek = (ListElementPtr) malloc(sizeof(struct ListElement));	//Alokace pam�ti pro nov� prvek + p�etypov�n� malloc
+
+	if (prvek == NULL){	//Testov�n� zda alokace usp�la
+		List_Error();		
+	} else {
+		//Vlo�en� prvku na za��tek seznamu
+		prvek->data = data;
+		prvek->nextElement = list->firstElement;
+		list->firstElement = prvek;
+	}
 }
 
 /**
@@ -106,7 +129,7 @@ void List_InsertFirst( List *list, int data ) {
  * @param list Ukazatel na inicializovanou strukturu jednosměrně vázaného seznamu
  */
 void List_First( List *list ) {
-	solved = FALSE; /* V případě řešení, smažte tento řádek! */
+	list->activeElement = list->firstElement;
 }
 
 /**
